@@ -1,0 +1,33 @@
+{
+  "feishu": {
+    "webhook": "",
+    "secret": "",
+    "dry_run": false
+  },
+  "rules": {
+    "drop_pct": 5.0,
+    "rise_pct": 5.0,
+    "undercut_pct": 8.0,
+    "margin": 0.02,
+    "sustained_n": 3,
+    "dedupe_hours": 24
+  },
+  "interval_seconds": 7200,
+  "db": "data/price.sqlite",
+  "products": [
+    {
+      "name": "竞品A·蓝牙耳机",
+      "url": "fixtures/competitor_a.html",
+      "selector": ".price",
+      "our_price": 199,
+      "enabled": true
+    },
+    {
+      "name": "竞品B·机械键盘",
+      "url": "fixtures/competitor_b.html",
+      "selector": ".price",
+      "our_price": 999,
+      "enabled": true
+    }
+  ]
+}

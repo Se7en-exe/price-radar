@@ -2,39 +2,88 @@
   "name": "竞品价格监控 → 飞书",
   "nodes": [
     {
-      "parameters": { "rule": { "interval": [{ "field": "hours", "hoursInterval": 2 }] } },
-      "id": "a1", "name": "每2小时", "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.2, "position": [-320, 0]
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "a1",
+      "name": "每2小时",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        0
+      ]
     },
     {
       "parameters": {
         "url": "https://example.com/item/123",
-        "options": { "timeout": 15000, "response": { "response": { "responseFormat": "text" } } }
+        "options": {
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
       },
-      "id": "a2", "name": "抓页面", "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2, "position": [-100, 0]
+      "id": "a2",
+      "name": "抓页面",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -100,
+        0
+      ]
     },
     {
       "parameters": {
         "jsCode": "const html = $input.first().json.data || $input.first().json.body || '';\nconst m = String(html).match(/[¥￥]\\s*([\\d,]+(?:\\.\\d+)?)/);\nconst price = m ? Number(m[1].replace(/,/g, '')) : null;\nconst prev = Number($('读上次价格').first().json.price || 0);\nreturn [{ json: { price, prev, drop: prev && price ? (prev - price) / prev * 100 : 0 } }];"
       },
-      "id": "a3", "name": "取价格", "type": "n8n-nodes-base.code",
-      "typeVersion": 2, "position": [120, 0]
+      "id": "a3",
+      "name": "取价格",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        120,
+        0
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
-          "conditions": [{
-            "leftValue": "={{ $json.drop }}",
-            "rightValue": 5,
-            "operator": { "type": "number", "operation": "larger" }
-          }],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.drop }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "larger"
+              }
+            }
+          ],
           "combinator": "and"
         }
       },
-      "id": "a4", "name": "跌幅>5%?", "type": "n8n-nodes-base.if",
-      "typeVersion": 2, "position": [340, 0]
+      "id": "a4",
+      "name": "跌幅>5%?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        340,
+        0
+      ]
     },
     {
       "parameters": {
@@ -45,24 +94,84 @@
         "jsonBody": "={\n  \"msg_type\": \"text\",\n  \"content\": { \"text\": \"竞品降价 {{$json.drop.toFixed(1)}}%：￥{{$json.prev}} → ￥{{$json.price}}\" }\n}",
         "options": {}
       },
-      "id": "a5", "name": "推飞书", "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2, "position": [560, 0]
+      "id": "a5",
+      "name": "推飞书",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        0
+      ]
     },
     {
       "parameters": {
         "operation": "readWriteFile",
         "fileSelector": "/data/last_price.json"
       },
-      "id": "a6", "name": "读上次价格", "type": "n8n-nodes-base.readWriteFile",
-      "typeVersion": 1, "position": [-100, 220]
+      "id": "a6",
+      "name": "读上次价格",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        220
+      ]
     }
   ],
   "connections": {
-    "每2小时": { "main": [[{ "node": "抓页面", "type": "main", "index": 0 }, { "node": "读上次价格", "type": "main", "index": 0 }]] },
-    "抓页面": { "main": [[{ "node": "取价格", "type": "main", "index": 0 }]] },
-    "取价格": { "main": [[{ "node": "跌幅>5%?", "type": "main", "index": 0 }]] },
-    "跌幅>5%?": { "main": [[{ "node": "推飞书", "type": "main", "index": 0 }], []] }
+    "每2小时": {
+      "main": [
+        [
+          {
+            "node": "抓页面",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "读上次价格",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "抓页面": {
+      "main": [
+        [
+          {
+            "node": "取价格",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取价格": {
+      "main": [
+        [
+          {
+            "node": "跌幅>5%?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "跌幅>5%?": {
+      "main": [
+        [
+          {
+            "node": "推飞书",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
   },
-  "settings": { "executionOrder": "v1" },
+  "settings": {
+    "executionOrder": "v1"
+  },
   "active": false
 }

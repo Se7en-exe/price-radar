@@ -63,9 +63,13 @@ def evaluate(name: str, prev, cur, our_price: float | None, history: list, cfg: 
                           f"建议调价到 ￥{sug}（竞品价 +{c['margin']*100:.0f}%，且不高于现价）"], "critical"))
 
     n = int(c["sustained_n"])
-    prices = [s.price for s in history[:n] if s.price]
-    if len(prices) >= n and all(prices[i] > prices[i + 1] for i in range(len(prices) - 1)):
-        total = _pct(prices[0], prices[-1])
+    prices = [s.price for s in history[:n] if s.price]      # history 是最新在前
+    if len(prices) >= n:
+        seq = list(reversed(prices))                        # 翻成时间正序：旧 -> 新
+        if not all(seq[i] > seq[i + 1] for i in range(len(seq) - 1)):
+            seq = []
+        if seq:
+            total = _pct(seq[0], seq[-1])
         out.append(Alert("sustained", f"{name}：连续 {n} 次下跌，累计 {total:.1f}%",
                          ["这是趋势不是波动，按调价流程走"], "critical"))
     return out

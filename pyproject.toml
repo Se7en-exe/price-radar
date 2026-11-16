@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "price-radar"
+version = "0.3.0"
+description = "Competitor price monitor that pushes alerts to Feishu (Lark)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Se7en-exe", email = "115208577+Se7en-exe@users.noreply.github.com" }]
+keywords = ["price-monitoring", "competitor-analysis", "feishu", "lark", "scraping", "automation"]
+dependencies = ["requests>=2.31", "beautifulsoup4>=4.12", "lxml>=5.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+browser = ["playwright>=1.44"]
+
+[project.scripts]
+price-radar = "price_radar.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Se7en-exe/price-radar"
+
+[tool.setuptools]
+packages = ["price_radar"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

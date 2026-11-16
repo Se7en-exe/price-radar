@@ -39,5 +39,6 @@ class H(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    print("mock feishu webhook -> http://127.0.0.1:8899/hook")
-    HTTPServer(("127.0.0.1", 8899), H).serve_forever()
+    host = os.environ.get("MOCK_HOST", "127.0.0.1")
+    print("mock feishu webhook -> http://%s:8899/hook" % host)
+    HTTPServer((host, 8899), H).serve_forever()

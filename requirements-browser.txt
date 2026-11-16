@@ -1,0 +1,4 @@
+# 可选：JS 渲染页面 / 反爬站点
+-r requirements.txt
+playwright>=1.44
+# 装完还要：python -m playwright install chromium
