@@ -3,6 +3,7 @@
 > 定时抓竞品商品页的价格与库存，按阈值判定「降价 / 涨价 / 断货 / 补货 / 被压价 / 连续下跌」，
 > 合成一张飞书卡片推到群里，并给出跟价建议。纯 Python + SQLite，单文件数据库，无需任何中间件。
 
+[![CI](https://github.com/Se7en-exe/price-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/Se7en-exe/price-radar/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -175,7 +176,7 @@ python -m pytest -q
 
 覆盖：四级取价降级、库存词判断、五类阈值边界、跟价建议算法、同秒插入的取最新回归、告警去重窗口、
 飞书签名参考向量（HMAC 结果写死对照）、干跑不发请求、配置合并与环境变量覆盖、幂等入库。
-想开 GitHub Actions：把 docs/ci.yml.example 复制到 .github/workflows/ci.yml 再提交（推送 workflow 文件需要 token 带 workflow 权限，或直接在网页上新建）。
+CI 在 Ubuntu + Windows × Python 3.10/3.11/3.12 六个组合上跑（GitHub Actions 已跑绿），另跑一次离线 demo。
 
 ---
 
