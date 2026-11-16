@@ -11,3 +11,6 @@ n8n/*.demo.json
 config.json
 .pytest_cache/
 *.log
+
+# Windows 保留名（误重定向生成）
+CON

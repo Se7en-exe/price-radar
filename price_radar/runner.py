@@ -9,12 +9,25 @@ import json
 import logging
 import os
 import random
+import sys
 import time
 
 from . import fetch, rules, store
 from .notify import Feishu, build_card
 
 log = logging.getLogger("price_radar")
+
+
+def ensure_utf8_stdio() -> None:
+    """Windows 控制台默认 cp936/cp1252，直接 print 中文和 ￥ 会 UnicodeEncodeError。
+
+    这里把 stdout/stderr 切成 utf-8，让程序在任何 locale 下都能正常输出。
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")     # type: ignore[attr-defined]
+        except (AttributeError, ValueError):
+            pass
 
 
 def setup_logging(logfile: str = os.path.join("out", "price_radar.log"), level: int = logging.INFO) -> None:

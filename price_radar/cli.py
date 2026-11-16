@@ -21,7 +21,7 @@ import time
 from . import config as cfgmod
 from . import rules, store
 from .notify import Feishu
-from .runner import crawl_all, run_forever, run_once, setup_logging
+from .runner import crawl_all, ensure_utf8_stdio, run_forever, run_once, setup_logging
 
 
 def _cfg(args) -> dict:
@@ -195,6 +195,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    ensure_utf8_stdio()
     args = build_parser().parse_args(argv)
     setup_logging()
     return args.func(args)
