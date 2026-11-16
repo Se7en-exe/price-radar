@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+out/
+.env
+n8n-data/
+out_server.log
+
